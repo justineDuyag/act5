@@ -1,0 +1,50 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="tab2"></ion-back-button>
+        </ion-buttons>
+        <ion-title>
+                Create message
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<br/>
+
+<ion-content>
+    <ion-grid>
+        <ion-row *ngFor="let message of messages" >
+            <ion-col offset="5" size="auto" *ngIf="currentUser !== message.user" class="message other-message">
+                <b>{{ message.user}}</b><br/>
+                <span>{{message.msg }}</span>
+                <div class="time" text-right><br>
+                    {{message.createdAt |date:'short'}}
+                </div>
+            </ion-col>
+            <ion-col offset="0" size="auto" *ngIf="currentUser === message.user" class="message my-message">
+                <b>{{ message.user}}</b><br/>
+                <span>{{message.msg }}</span>
+                <div class="time" text-right><br>
+                    {{message.createdAt |date:'short'}}
+                </div>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+   
+</ion-content>
+<ion-footer>
+    <ion-toolbar color="light">
+        <ion-row  align-items-center no-padding>
+            <ion-col size="8">
+                <ion-textarea autosize maxRows="3" [(ngModel)]="newMsg" class="message-input"></ion-textarea>
+
+            </ion-col>
+            <ion-col size="3" >
+                <ion-button expand="block" fill="clear" color="primary" [disabled] ="newMsg ==='' " class="msg-btn" (click)="sendMessage()">
+                    <ion-icon name="send" slot="icon-only"></ion-icon>
+                </ion-button>
+
+            </ion-col>
+        </ion-row>
+
+    </ion-toolbar>
+</ion-footer>

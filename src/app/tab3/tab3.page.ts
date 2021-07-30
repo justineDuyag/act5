@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FirebaseService } from '../services/firebase.service';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import {AlertController} from '@ionic/angular';
@@ -15,7 +15,7 @@ interface ContactData {
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss'],
 })
-export class Tab3Page implements OnInit {
+export class Tab3Page {
 
   contactList = [];
   contactData: ContactData;
@@ -34,17 +34,18 @@ export class Tab3Page implements OnInit {
       contName: ['', [Validators.required]],
       familyName: ['', [Validators.required]],
       contNumber: ['', [Validators.required]]
-    });
+    })
 
-    this.firebaseService.readcontact().subscribe(data => {
-
-      this.contactList = data.map(e => ({
+    this.firebaseService.readContact().subscribe(data => {
+      this.contactList = data.map(e => {
+        return {
           id: e.payload.doc.id,
           isEdit: false,
-          contName: e.payload.doc.data().contName,
-          familyName: e.payload.doc.data().familyName,
-          contNumber: e.payload.doc.data().contNumber,
-        }));
+          contName: e.payload.doc.data()['contName'],
+          familyName: e.payload.doc.data()['familyName'],
+          contNumber: e.payload.doc.data()['contNumber'],
+        };
+      })
       console.log(this.contactList);
 
     });
@@ -52,7 +53,7 @@ export class Tab3Page implements OnInit {
 
   createContact() {
     console.log(this.contactForm.value);
-    this.firebaseService.createcontact(this.contactForm.value).then(resp => {
+    this.firebaseService.createContact(this.contactForm.value).then(_resp => {
       this.contactForm.reset();
     })
       .catch(error => {
@@ -76,7 +77,7 @@ export class Tab3Page implements OnInit {
             text:'Yes',
             cssClass:'warning',
             handler:()=>{
-              this.firebaseService.deletecontact(rowID);
+              this.firebaseService.deleteContact(rowID);
               }
             },
 

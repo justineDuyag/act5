@@ -17,7 +17,7 @@ export class FirebaseService {
     return this.firestore.collection(this.collectionName).add(record);
   }
 
-  readC() {
+  readContact() {
     return this.firestore.collection(this.collectionName).snapshotChanges();
   }
 
